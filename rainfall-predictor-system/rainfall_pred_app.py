@@ -5,6 +5,7 @@ import numpy as np
 import joblib
 from sklearn.preprocessing import StandardScaler
 
+import os
 BASE_DIR = os.path.dirname(__file__)
 
 model = joblib.load(os.path.join(BASE_DIR, "rainfall_model.pkl"))
@@ -39,4 +40,5 @@ if submit:
         st.success("☔ Yes, it may rain today!")
     else:
         st.info("🌤️ No, it likely won't rain today.")
+
 
