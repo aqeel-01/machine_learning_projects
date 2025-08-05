@@ -5,9 +5,12 @@ import numpy as np
 import joblib
 from sklearn.preprocessing import StandardScaler
 
-# Load model and scaler
-model = joblib.load("rainfall_model.pkl")
-scaler = joblib.load("scaler.pkl")
+BASE_DIR = os.path.dirname(__file__)
+
+model = joblib.load(os.path.join(BASE_DIR, "rainfall_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
+
+
 
 st.set_page_config(page_title="Rainfall Prediction App", layout="centered")
 
@@ -36,3 +39,4 @@ if submit:
         st.success("☔ Yes, it may rain today!")
     else:
         st.info("🌤️ No, it likely won't rain today.")
+
