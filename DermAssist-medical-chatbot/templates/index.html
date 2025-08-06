@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DermAssist (Medical Chatbot)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-300 font-sans">
+
+<div class="container mx-auto p-6">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold text-purple-300">DermAssist</h1>
+        <button id="clear-chat" class="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700">🗑️ Clear Chat</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        <!-- Upload Image -->
+        <div class="bg-white/10 p-5 rounded-xl border border-white/20">
+            <h2 class="text-lg font-semibold text-purple-400 mb-3">📤 Upload Image</h2>
+            <button id="upload-btn" class="w-full py-2 bg-purple-500 hover:bg-purple-600 text-white rounded">📸 Click to Upload</button>
+            <input type="file" id="image-upload" accept="image/*" class="hidden" />
+            <div id="image-container" class="hidden mt-4">
+                <img id="display-image" src="" alt="Uploaded image" class="w-full rounded shadow" />
+            </div>
+        </div>
+
+        <!-- Ask Question -->
+        <div class="bg-white/10 p-5 rounded-xl border border-white/20">
+            <h2 class="text-lg font-semibold text-blue-400 mb-3">💬 Ask Question</h2>
+            <textarea id="query-input" rows="4" placeholder="Enter your question..." class="w-full p-3 bg-gray-800 text-gray-300 rounded"></textarea>
+            <button id="submit-query" class="w-full mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">🚀 Submit</button>
+        </div>
+    </div>
+
+    <!-- Response Section -->
+    <div class="bg-white/10 p-5 rounded-xl border border-white/20">
+        <h2 class="text-lg font-semibold text-green-400">🧠 Chatbot Response</h2>
+        <div id="response-container" class="mt-4 space-y-4"></div>
+    </div>
+
+    <!-- Error -->
+    <div id="error-container" class="hidden mt-4 p-4 bg-red-500 text-white rounded">
+        <p id="error-text"></p>
+    </div>
+</div>
+
+<script>
+    const uploadBtn = document.getElementById('upload-btn');
+    const imageUpload = document.getElementById('image-upload');
+    const displayImage = document.getElementById('display-image');
+    const imageContainer = document.getElementById('image-container');
+    const queryInput = document.getElementById('query-input');
+    const submitQuery = document.getElementById('submit-query');
+    const responseContainer = document.getElementById('response-container');
+    const errorContainer = document.getElementById('error-container');
+    const errorText = document.getElementById('error-text');
+    const clearChatBtn = document.getElementById('clear-chat');
+
+    let uploadedImage = null;
+    let sessionId = localStorage.getItem("session_id") || crypto.randomUUID();
+    localStorage.setItem("session_id", sessionId);
+
+    uploadBtn.addEventListener('click', () => imageUpload.click());
+
+    imageUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            uploadedImage = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                displayImage.src = e.target.result;
+                imageContainer.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    submitQuery.addEventListener('click', async () => {
+        const query = queryInput.value.trim();
+        if (!query) return showError("⚠️ Please enter your query.");
+
+        submitQuery.disabled = true;
+        submitQuery.textContent = "Processing...";
+
+        try {
+            let response;
+            if (uploadedImage) {
+                const formData = new FormData();
+                formData.append("image", uploadedImage);
+                formData.append("query", query);
+                formData.append("session_id", sessionId);
+                response = await fetch("/upload_and_query", { method: "POST", body: formData });
+                uploadedImage = null;
+            } else {
+                const formData = new FormData();
+                formData.append("query", query);
+                formData.append("session_id", sessionId);
+                response = await fetch("/continue_chat", { method: "POST", body: formData });
+            }
+
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.detail || "Error occurred.");
+
+            const html = marked.parse(result.llama);
+
+            // Create user bubble
+            const userBubble = document.createElement("div");
+            userBubble.className = "text-right";
+            userBubble.innerHTML = `
+                <div class="inline-block max-w-xl bg-blue-600 text-white px-4 py-3 rounded-2xl rounded-br-none shadow mb-2 transition-all">
+                    <div class="text-sm font-semibold mb-1">👤 You:</div>
+                    <div>${marked.parse(query)}</div>
+                </div>
+            `;
+            responseContainer.appendChild(userBubble);
+
+            // Create bot bubble
+            const botBubble = document.createElement("div");
+            botBubble.className = "text-left";
+            botBubble.innerHTML = `
+                <div class="inline-block max-w-xl bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none shadow mb-4 transition-all">
+                    <div class="text-sm font-semibold mb-1">🤖 DermAssist:</div>
+                    <div>${html}</div>
+                </div>
+            `;
+            responseContainer.appendChild(botBubble);
+
+            errorContainer.classList.add("hidden");
+
+            // Auto-scroll
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+
+        } catch (err) {
+            showError(err.message);
+        } finally {
+            submitQuery.disabled = false;
+            submitQuery.textContent = "🚀 Submit";
+            queryInput.value = "";
+        }
+    });
+
+    clearChatBtn.addEventListener("click", async () => {
+        await fetch("/clear_chat", {
+            method: "POST",
+            body: new URLSearchParams({ session_id: sessionId }),
+        });
+        responseContainer.innerHTML = "";
+        uploadedImage = null;
+        localStorage.setItem("session_id", crypto.randomUUID());
+        sessionId = localStorage.getItem("session_id");
+    });
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorContainer.classList.remove("hidden");
+    }
+</script>
+</body>
+</html>
