@@ -27,12 +27,12 @@ DermAssist is an AI-driven medical chatbot built using **FastAPI** and **LLAMA-4
 
 ###  Upload & Ask
 
-![Upload and Ask](screenshots/chatbot%20pic1.png)
+![Upload and Ask](screenshots/chatbot%20pic1.PNG)
 
 
 
 ###  AI Chat Response
-![Chatbot Response](screenshots/chatbot%20pic2.png)
+![Chatbot Response](screenshots/chatbot%20pic2.PNG)
 
 ---
 
@@ -103,11 +103,15 @@ Continues chat in 50-word or fewer responses for clarity
 Persists chat in memory per session ID via cookies
 
 
-🛠️ Technologies Used
+##  Technologies Used
 
 FastAPI
+
 GROQ + LLAMA-4
+
 Tailwind CSS
+
 Pillow
+
 JavaScript Fetch API
 
