@@ -90,8 +90,4 @@ cough
 weight_loss
 yellow_eyes
 
-## How to Run
 
-Install required libraries:
-
-pip install numpy pandas matplotlib seaborn scikit-learn imbalanced-learn
