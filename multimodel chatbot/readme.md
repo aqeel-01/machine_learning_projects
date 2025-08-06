@@ -8,7 +8,7 @@ MultiModal Scout is a FastAPI-based web application that allows users to upload 
 
 ##  Screenshot
 
-![MultiModal Scout UI](multimodel%20chatbot/screenshot/multimodel%20pic1.PNG)
+![MultiModal Scout UI](screenshot/multimodel%20pic1.PNG)
 
 ---
 
