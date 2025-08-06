@@ -8,7 +8,8 @@ A **content-based movie recommendation system** built with **Python**, **pandas*
 
 ##  Demo Screenshot
 
-![Movie Recommender Demo](screenshots/movie%20pic/demo.png)
+![App Screenshot](screenshots/movie%20pic.PNG)
+
 
 ---
 
@@ -60,6 +61,7 @@ TMDB_API_KEY=your_tmdb_api_key_here
 ## Run the App
 
 streamlit run app.py
+```
 
 ##  Project Structure
 
