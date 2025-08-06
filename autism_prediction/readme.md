@@ -78,6 +78,7 @@ Below is a sample output for a negative ASD prediction:
 
 ![ASD Negative Prediction](screenshots/autism_neg.png)
 
+
 ## File Structure
 
 ```text
