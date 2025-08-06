@@ -1,82 +1,48 @@
-# 🌧️ Rainfall Prediction Project
+# Rainfall Prediction Project
 
-A machine learning-powered web application that predicts **whether it will rain today** based on real-world meteorological data. Built using Python, Scikit‑learn, XGBoost, and Streamlit.
+This is a machine learning web application that predicts whether it will rain today based on atmospheric data. It includes model training, evaluation, and deployment using Streamlit.
 
----
-
-## 📌 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)  
 - [Dataset](#dataset)  
 - [Project Pipeline](#project-pipeline)  
 - [Model Performance](#model-performance)  
-- [App Demo](#app-demo)  
+- [Live Demo](#live-demo)  
 - [Screenshots](#screenshots)  
 - [How to Run Locally](#how-to-run-locally)  
 - [Project Structure](#project-structure)  
 - [Dependencies](#dependencies)  
 - [License](#license)
 
----
+## Overview
 
-## 📖 Overview
+This project uses weather features such as temperature, humidity, pressure, and wind to classify whether rainfall will occur. The dataset is preprocessed, visualized, and modeled using multiple classifiers. The best-performing model is deployed via a Streamlit web app.
 
-This project explores a rainfall dataset with the goal of classifying days into **rainy** or **non-rainy**. It includes:
-
-- Data cleaning and preprocessing  
-- Exploratory Data Analysis (EDA)  
-- Feature selection & correlation analysis  
-- Model training and evaluation (Logistic Regression, XGBoost, SVM)  
-- Deployment via a simple Streamlit web application
-
----
-
-## 📊 Dataset
+## Dataset
 
 - File: `Rainfall.csv`  
-- Records: 366 days of weather data  
-- Features include:  
+- Total records: 366  
+- Features include:
   - Pressure, Temperature, Dew Point  
   - Humidity, Cloud Cover, Sunshine  
   - Wind Direction, Wind Speed  
-  - Rainfall (`yes` / `no`)
+  - Target: Rainfall (`yes` / `no`)
 
----
+## Project Pipeline
 
-## 🔁 Project Pipeline
+1. Load and clean data (fix column names, handle missing values)
+2. Perform exploratory data analysis (distribution, boxplots, correlation)
+3. Convert categorical target to binary
+4. Drop redundant features
+5. Handle class imbalance using oversampling
+6. Normalize features using StandardScaler
+7. Train multiple models (Logistic Regression, XGBoost, SVC)
+8. Evaluate and compare model performance
+9. Save the best model and scaler
+10. Deploy using Streamlit
 
-1. **Import & Inspect Data**  
-   - Clean column names  
-   - Handle missing values (mean imputation)  
-
-2. **EDA & Visualization**  
-   - Distribution plots, boxplots  
-   - Rainfall ratio (Pie chart)  
-   - Correlation heatmap  
-
-3. **Data Preprocessing**  
-   - Convert categorical `rainfall` to binary  
-   - Drop redundant features (`maxtemp`, `mintemp`)  
-   - Balance imbalanced classes using `RandomOverSampler`  
-   - Normalize features using `StandardScaler`  
-
-4. **Modeling**  
-   - Logistic Regression  
-   - XGBoost Classifier  
-   - Support Vector Classifier (SVC)  
-
-5. **Evaluation**  
-   - ROC-AUC scores  
-   - Confusion matrix  
-   - Classification report  
-
-6. **Deployment**  
-   - Save best model (`LogisticRegression`)  
-   - Build interactive UI using Streamlit  
-
----
-
-## ✅ Model Performance
+## Model Performance
 
 | Model               | Training ROC-AUC | Validation ROC-AUC |
 |--------------------|------------------|---------------------|
@@ -84,82 +50,51 @@ This project explores a rainfall dataset with the goal of classifying days into 
 | XGBoost             | 1.000            | 0.839               |
 | SVC (RBF kernel)    | 0.903            | 0.886               |
 
-🔍 **Logistic Regression** was selected due to balanced performance on both training and validation data.
+The Logistic Regression model was selected for deployment due to its strong and balanced performance.
 
----
+## Live Demo
 
-## 🚀 App Demo
+You can access the deployed application here:  
+[https://machinelearningprojects-4wqpwslbgksmpjwjlzo8vb.streamlit.app/](https://machinelearningprojects-4wqpwslbgksmpjwjlzo8vb.streamlit.app/)
 
-Experience the app live in your browser:
+## Screenshots
 
-[**☁️ Live Rainfall Prediction Demo**](https://machinelearningprojects-4wqpwslbgksmpjwjlzo8vb.streamlit.app/)
+### No Rain Predicted
 
----
+![No Rain](screenshots/no%20rain.PNG)
 
-## 🖼️ Screenshots
+### Rain Predicted
 
-### ☀️ No Rain Predicted
-<img src="screenshots/no_rain_prediction.png" alt="No Rain Prediction" width="600"/>
+![Rain](screenshots/yes%20rain.PNG)
 
-### 🌧️ Rain Predicted
-<img src="screenshots/rain_prediction.png" alt="Rain Prediction" width="600"/>
+## How to Run Locally
 
----
+1. Clone the repository:
 
-## 💻 How to Run Locally
+```bash
+git clone https://github.com/yourusername/rainfall-prediction-app.git
+cd rainfall-prediction-app
 
-1. **Clone the repository**
-    ```bash
-    git clone https://github.com/yourusername/rainfall-prediction-app.git
-    cd rainfall-prediction-app
-    ```
+2. Install dependencies:
+ pip install -r requirements.txt
 
-2. **Install dependencies**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. **Ensure model files are present**
-    - `rainfall_model.pkl`
-    - `scaler.pkl`
-
-4. **Run the Streamlit app**
-    ```bash
+3. Ensure model files are in place:
+   rainfall_model.pkl
+   scaler.pkl
+4. Run the Streamlit app:
     streamlit run app.py
-    ```
 
----
 
-## 📁 Project Structure
-
+Project Structure
 rainfall-prediction-app/
 ├── Rainfall.csv
 ├── rainfall_model.pkl
 ├── scaler.pkl
 ├── app.py
 ├── screenshots/
-│ ├── no_rain_prediction.png
-│ └── rain_prediction.png
+│   ├── no rain.png
+│   └── yes rain.png
 ├── README.md
 └── requirements.txt
 
-
-
----
-
-## 🧩 Dependencies
-
-- numpy  
-- pandas  
-- matplotlib  
-- seaborn  
-- scikit-learn  
-- xgboost  
-- imbalanced-learn  
-- joblib  
-- streamlit  
-
-Install all with:
-```bash
-pip install -r requirements.txt
 
