@@ -43,6 +43,8 @@ Observed 0.17% fraud cases, confirming class imbalance
 ### 3. Analyzing Class Distribution
 
 fraud = data[data['Class'] == 1]
+
+
 valid = data[data['Class'] == 0]
 
 Fraud Cases: 492
