@@ -82,7 +82,7 @@ cd rainfall-prediction-app
    rainfall_model.pkl
    scaler.pkl
 4. Run the Streamlit app:
-    streamlit run app.py
+    streamlit run rainfall_pred_app.py
 
 
 Project Structure
@@ -90,7 +90,7 @@ rainfall-prediction-app/
 ├── Rainfall.csv
 ├── rainfall_model.pkl
 ├── scaler.pkl
-├── app.py
+├── rainfall_pred_app.py
 ├── screenshots/
 │   ├── no rain.png
 │   └── yes rain.png
