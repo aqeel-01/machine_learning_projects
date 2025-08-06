@@ -39,14 +39,6 @@ Includes 30 numeric features like:
 - **Train/Test Split:** 70% training, 30% testing
 - **Accuracy:** ~94%
 
-**Classification Report:**
-
-
-          precision    recall  f1-score   support
-Malignant 0.93 0.90 0.92 63
-Benign 0.95 0.96 0.95 108
-accuracy 0.94 171
-
 ---
 
 ##  How It Works
