@@ -1,6 +1,6 @@
 
 
-#  DermAssist – AI-Powered Skin Condition Chatbot
+#  DermAssist – AI-Powered Skin  Chatbot
 
 DermAssist is an AI-driven medical chatbot built using **FastAPI** and **LLAMA-4 (via GROQ)**. It enables users to upload a **skin condition image**, ask health-related queries, and receive a **diagnosis with treatment recommendations tailored for the Pakistani market**.
 
@@ -38,10 +38,7 @@ DermAssist is an AI-driven medical chatbot built using **FastAPI** and **LLAMA-4
 
 ##  Demo Video
 
-[ Click here to view screen recording demo](demo/screenrecording.mp4)
-
-<!-- Optional image link -->
-<!-- [![Watch Demo](screenshots/chatbotpic1.png)](demo/screenrecording.mp4) -->
+![Demo Preview](demo_/screenrecording-ezgif.gif)
 
 ---
 
