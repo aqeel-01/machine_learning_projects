@@ -12,24 +12,12 @@ Symptoms: fever, headache, nausea, vomiting, fatigue, joint_pain, skin_rash, cou
 
 Target: disease (encoded using LabelEncoder)
 
- ##  Libraries Used
-numpy
-
-pandas
-
-matplotlib
-
-seaborn
-
-scikit-learn
-
-imbalanced-learn
-
 ## Installation
-bash
 
- pip install numpy pandas matplotlib seaborn scikit-learn imbalanced-learn
+pip install numpy pandas matplotlib seaborn scikit-learn imbalanced-learn
+
 ##  Project Workflow
+
 Step 1: Data Preprocessing
 Loaded the dataset using pandas.
 
@@ -48,88 +36,62 @@ Naive Bayes	32.25%
 SVM	50.00%
 
 Step 4: Evaluation on Test Data
+
 Random Forest
 
 Accuracy: 53.51%
-
 F1 Score: 0.5239
 
 Naive Bayes
 
 Accuracy: 16.23%
-
 F1 Score: 0.1713
 
 SVM
 
 Accuracy: 48.98%
-
 F1 Score: 0.4834
 
 All models were evaluated using accuracy, F1 score, and confusion matrices.
 
 Step 5: Ensemble Voting Classifier
+
 Combined predictions from all models using mode() for majority voting.
 
 Combined Accuracy: 48.83%
-
 Combined F1 Score: 0.4810
 
 Step 6: Disease Prediction from Symptoms
+
 Function predict_disease() takes comma-separated symptoms and returns predicted diseases from each model + final majority vote.
 
 Example:
-python
-
 
 predict_disease("fever, headache, skin_rash")
-Sample Output:
-bash
 
+Sample Output:
 {
   'Random Forest Prediction': 'Tuberculosis',
   'Naive Bayes Prediction': 'Urinary tract infection',
   'SVM Prediction': 'Peptic ulcer disease',
   'Final Prediction (Majority Vote)': 'Tuberculosis'
 }
+
 ##  Features Used for Prediction
+
 fever
-
 headache
-
 nausea
-
 vomiting
-
 fatigue
-
 joint_pain
-
 skin_rash
-
 cough
-
 weight_loss
-
 yellow_eyes
 
 ## How to Run
+
 Install required libraries:
 
-bash
 pip install numpy pandas matplotlib seaborn scikit-learn imbalanced-learn
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Ask ChatGPT
