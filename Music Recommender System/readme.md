@@ -45,31 +45,39 @@ Built with **Pandas**, **NLTK**, **Scikit-learn**, and deployed using **Streamli
 
 ##  Project Structure
 
+details> <summary>📁 Click to expand project structure</summary>
+plaintext
+
 machine_learning_projects/
 └── Music Recommender System/
-    ├── recomendation_system_music.ipynb       # Jupyter notebook for preprocessing, modeling
-    ├── df.pkl                                 # Preprocessed DataFrame (lyrics, artists, songs)
-    ├── similer.pkl                            # Cosine similarity matrix
-    ├── webapp.py                              # Streamlit web app script
-    ├── .env                                   # Environment variables for Spotify API (not committed)
+    ├── recomendation_system_music.ipynb       # Jupyter notebook for preprocessing & modeling
+    ├── df.pkl                                 # Pickled DataFrame of sampled songs
+    ├── similer.pkl                            # Pickled cosine similarity matrix
+    ├── webapp.py                              # Streamlit frontend application
+    ├── .env                                   # Contains SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET (not committed)
     ├── screenshots/
-    │   └── song pic upadted.PNG               # Screenshot used in README
-    └── README.md                              # Project documentation (this file)
+    │   └── song pic upadted.PNG               # UI screenshot used in README
+    └── README.md                              # Project documentation
+</details>     
 
----
 ## Run It Locally
+
 ### 1 Clone the repository
 
 git clone https://github.com/aqeel-01/machine_learning_projects.git
+
 cd machine_learning_projects/Music\ Recommender\ System
 ### 2 Install dependencies
 
 pip install -r requirements.txt
+
 ### 3 Set up Spotify API credentials
 Create a .env file in the Music Recommender System/ directory with the following content:
 
 SPOTIPY_CLIENT_ID=your_spotify_client_id
+
 SPOTIPY_CLIENT_SECRET=your_spotify_client_secret
+
  You can get your credentials by registering an app at Spotify Developer Dashboard
 
 ### 4 Launch the app
