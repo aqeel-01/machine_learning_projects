@@ -78,14 +78,17 @@ Below is a sample output for a negative ASD prediction:
 
 ![ASD Negative Prediction](screenshots/autism_neg.png)
 
-## structure
+## File Structure
+
+```text
 autism_predictor/
 │
-├── autism_app.py            # Streamlit application
-├── autism_prediction.ipynb  # EDA and model training notebook
-├── all_models.pkl           # Serialized models
-├── scaler.pkl               # StandardScaler object
-├── train.csv                # Original dataset
-├── autism_neg.png           # Screenshot of app result
-└── README.md                # This file
+├── autism_app.py             # Streamlit application
+├── autism_prediction.ipynb   # EDA and model training notebook
+├── all_models.pkl            # Serialized machine learning models
+├── scaler.pkl                # StandardScaler object for input features
+├── train.csv                 # Dataset used for training and analysis
+├── README.md                 # Project documentation (this file)
+├── screenshots/
+│   └── autism_neg.png        # Screenshot showing a negative ASD prediction
 
