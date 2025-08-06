@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MultiModal Scout 🌐</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-gray-200 font-sans">
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text drop-shadow">MultiModal Scout 🪐</h1>
+        <button id="clear-chat" class="px-4 py-2 text-sm bg-gradient-to-r from-red-500 to-pink-500 hover:scale-105 transition-transform text-white rounded-full shadow-lg">🗑️ Clear Chat</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow hover:shadow-xl transition-shadow">
+            <h2 class="text-lg font-semibold text-purple-300 mb-3">📤 Upload File</h2>
+            <button id="upload-btn" class="w-full py-2 bg-gradient-to-r from-purple-500 to-indigo-500 hover:scale-105 transition-transform text-white rounded-lg font-semibold shadow">📎 Click to Upload Image, PDF, or Video</button>
+            <input type="file" id="file-upload" accept="image/*,application/pdf,video/*" class="hidden" />
+            <div id="file-container" class="hidden mt-4">
+                <img id="display-image" src="" alt="Uploaded preview" class="w-full rounded-lg shadow mb-2 hidden" />
+                <video id="display-video" controls class="w-full rounded-lg shadow mb-2 hidden"></video>
+                <p id="file-name" class="text-sm text-gray-400"></p>
+            </div>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow hover:shadow-xl transition-shadow">
+            <h2 class="text-lg font-semibold text-blue-300 mb-3">💬 Ask Question</h2>
+            <textarea id="query-input" rows="4" placeholder="Enter your question..." class="w-full p-3 bg-gray-800/60 text-gray-200 rounded-lg resize-none shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <button id="submit-query" class="w-full mt-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:scale-105 transition-transform text-white rounded-lg font-semibold shadow">🚀 Submit</button>
+        </div>
+    </div>
+
+    <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow hover:shadow-xl transition-shadow">
+        <h2 class="text-lg font-semibold text-green-300"> Chatbot Response</h2>
+        <div id="response-container" class="mt-4 space-y-4 max-h-[60vh] overflow-y-auto pr-2"></div>
+    </div>
+
+    <div id="error-container" class="hidden mt-4 p-4 bg-red-600 text-white rounded-lg shadow">
+        <p id="error-text"></p>
+    </div>
+</div>
+
+<script>
+    const uploadBtn = document.getElementById('upload-btn');
+    const fileUpload = document.getElementById('file-upload');
+    const displayImage = document.getElementById('display-image');
+    const displayVideo = document.getElementById('display-video');
+    const fileContainer = document.getElementById('file-container');
+    const fileName = document.getElementById('file-name');
+    const queryInput = document.getElementById('query-input');
+    const submitQuery = document.getElementById('submit-query');
+    const responseContainer = document.getElementById('response-container');
+    const errorContainer = document.getElementById('error-container');
+    const errorText = document.getElementById('error-text');
+    const clearChatBtn = document.getElementById('clear-chat');
+
+    let uploadedFile = null;
+    let sessionId = localStorage.getItem("session_id") || crypto.randomUUID();
+    localStorage.setItem("session_id", sessionId);
+
+    uploadBtn.addEventListener('click', () => fileUpload.click());
+
+    fileUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            uploadedFile = file;
+            fileName.textContent = `Uploaded: ${file.name}`;
+            fileContainer.classList.remove('hidden');
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    displayImage.src = e.target.result;
+                    displayImage.classList.remove('hidden');
+                    displayVideo.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type.startsWith('video/')) {
+                const videoURL = URL.createObjectURL(file);
+                displayVideo.src = videoURL;
+                displayVideo.classList.remove('hidden');
+                displayImage.classList.add('hidden');
+            } else {
+                displayImage.classList.add('hidden');
+                displayVideo.classList.add('hidden');
+            }
+        }
+    });
+
+    submitQuery.addEventListener('click', async () => {
+        const query = queryInput.value.trim();
+        if (!query) return showError("⚠️ Please enter your query.");
+
+        submitQuery.disabled = true;
+        submitQuery.textContent = "Processing...";
+
+        try {
+            let response;
+            if (uploadedFile) {
+                const formData = new FormData();
+                formData.append("file", uploadedFile);
+                formData.append("query", query);
+                formData.append("session_id", sessionId);
+                response = await fetch("/upload_and_query", { method: "POST", body: formData });
+                uploadedFile = null;
+            } else {
+                const formData = new FormData();
+                formData.append("query", query);
+                formData.append("session_id", sessionId);
+                response = await fetch("/continue_chat", { method: "POST", body: formData });
+            }
+
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.detail || "Error occurred.");
+
+            const html = marked.parse(result.llama);
+
+            const userBubble = document.createElement("div");
+            userBubble.className = "text-right";
+            userBubble.innerHTML = `
+                <div class="inline-block max-w-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-2xl rounded-br-none shadow mb-2 transition-all">
+                    <div class="text-sm font-semibold mb-1">👤 You:</div>
+                    <div>${marked.parse(query)}</div>
+                </div>
+            `;
+            responseContainer.appendChild(userBubble);
+
+            const botBubble = document.createElement("div");
+            botBubble.className = "text-left";
+            botBubble.innerHTML = `
+                <div class="inline-block max-w-xl bg-gray-800/80 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none shadow mb-4 transition-all">
+                    <div class="text-sm font-semibold mb-1">🤖 UniChat:</div>
+                    <div>${html}</div>
+                </div>
+            `;
+            responseContainer.appendChild(botBubble);
+
+            errorContainer.classList.add("hidden");
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+
+        } catch (err) {
+            showError(err.message);
+        } finally {
+            submitQuery.disabled = false;
+            submitQuery.textContent = "🚀 Submit";
+            queryInput.value = "";
+        }
+    });
+
+    clearChatBtn.addEventListener("click", async () => {
+        await fetch("/clear_chat", {
+            method: "POST",
+            body: new URLSearchParams({ session_id: sessionId }),
+        });
+        responseContainer.innerHTML = "";
+        uploadedFile = null;
+        displayImage.classList.add('hidden');
+        displayVideo.classList.add('hidden');
+        fileContainer.classList.add('hidden');
+        localStorage.setItem("session_id", crypto.randomUUID());
+        sessionId = localStorage.getItem("session_id");
+    });
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorContainer.classList.remove("hidden");
+    }
+</script>
+</body>
+</html>
