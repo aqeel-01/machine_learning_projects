@@ -63,6 +63,6 @@ Includes 30 numeric features like:
 pip install streamlit scikit-learn matplotlib pandas numpy
 
 
-2. Run the App
+### 2. Run the App
 
 streamlit run cancer_app.py
