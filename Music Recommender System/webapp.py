@@ -1,80 +1,98 @@
 import pickle
-
 import streamlit as st
-
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from dotenv import load_dotenv
+import os
+import requests
+import warnings
 
+# Optional: suppress warnings
+warnings.filterwarnings("ignore")
 
-ClIENT_ID = " " # use the spotify genearted id here
-CLIENT_SECRET = "" # use the spotify genearted sceret key  here
+# Load environment variables
+load_dotenv()
+CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
 
-#intialize the spotify client
+# Spotify API setup
+client_credentials_manager = SpotifyClientCredentials(
+    client_id=CLIENT_ID, client_secret=CLIENT_SECRET
+)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-client_credentials_manger = SpotifyClientCredentials(client_id=ClIENT_ID , client_secret=CLIENT_SECRET)
+# Fallback Spotify logo
+FALLBACK_IMAGE_URL = "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Logo_CMYK_Green.png"
 
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manger)
+def is_valid_image_url(url):
+    """Check if image URL returns a successful response."""
+    try:
+        response = requests.head(url, timeout=3)
+        return response.status_code == 200
+    except Exception:
+        return False
 
-
-
-def get_song_album_cover_url(song_name , artist_name):
-    search_query = f"track:{song_name} artist:{artist_name}"
-    results = sp.search(q=search_query, type="track")
-
-
-    if results and results["tracks"]["items"]:
-        track = results["tracks"]["items"][0]
-        album_cover_url = track["album"]["images"][0]["url"]
-        print(album_cover_url)
-        return album_cover_url
-    else:
-        return ""
+def get_song_album_cover_url(song_name, artist_name):
+    """Get album cover URL or fallback image."""
+    try:
+        query = f"track:{song_name} artist:{artist_name}"
+        result = sp.search(q=query, type="track", limit=1)
+        if result and result["tracks"]["items"]:
+            url = result["tracks"]["items"][0]["album"]["images"][0]["url"]
+            if is_valid_image_url(url):
+                return url
+    except Exception as e:
+        print(f"Error getting cover for {song_name} - {artist_name}: {e}")
     
-
+    return FALLBACK_IMAGE_URL
 
 def recommend(song):
-    index = music[music['song'] == song].index[0]
-    distances = sorted(list(enumerate(similarity[index])), reverse= True , key = lambda x: x[1])
-    recommend_music_names = []
-    recommend_music_posters = []
-    for i in distances[1:6]:
-        #fetch the song poster
-        artist = music.iloc[i[0]].artist
-        print(artist)
-        print(music.iloc[i[0]].song)
-        recommend_music_posters.append(get_song_album_cover_url(music.iloc[i[0]].song ,artist))
-        recommend_music_names.append(music.iloc[i[0]].song)
-    
-    return recommend_music_names, recommend_music_posters
+    """Recommend 5 similar songs."""
+    try:
+        index = music[music['song'] == song].index[0]
+        distances = sorted(enumerate(similarity[index]), reverse=True, key=lambda x: x[1])
+        recommended_songs = []
+        recommended_posters = []
 
-st.header('Music Recommender System')
-music = pickle.load(open('df.pkl','rb'))
-similarity = pickle.load(open('similer.pkl','rb'))
+        for i in distances[1:6]:
+            song_name = music.iloc[i[0]].song
+            artist_name = music.iloc[i[0]].artist
+            album_cover = get_song_album_cover_url(song_name, artist_name)
+            recommended_songs.append(song_name)
+            recommended_posters.append(album_cover)
+
+        return recommended_songs, recommended_posters
+
+    except Exception as e:
+        st.error(f"Recommendation error: {e}")
+        return [], []
+
+# Streamlit UI setup
+st.set_page_config(page_title="🎵 Music Recommender", layout="wide")
+st.title("🎶 Music Recommender System")
 
 
-music_list = music['song'].values
-selected_song = st.selectbox(
-    "Type or select a song from the dropdown",
-    music_list
-)
+# Load data
+try:
+    music = pickle.load(open("df.pkl", "rb"))
+    similarity = pickle.load(open("similer.pkl", "rb"))
+except Exception as e:
+    st.error("Error loading model/data files.")
+    st.stop()
 
+# Song selection
+selected_song = st.selectbox("🎧 Choose a song:", music['song'].values)
 
-if st.button('Show Recommendation'):
-    recommend_music_names , recommend_music_posters = recommend(selected_song)
-    col1, col2 , col3 , col4, col5 = st.columns(5)
-    with col1:
-        st.text(recommend_music_names[0])
-        st.image(recommend_music_posters[0])
-    with col2:
-        st.text(recommend_music_names[1])
-        st.image(recommend_music_posters[1])
-    with col3:
-        st.text(recommend_music_names[2])
-        st.image(recommend_music_posters[2])
-    with col4:
-        st.text(recommend_music_names[3])
-        st.image(recommend_music_posters[3])
-    with col5:
-        st.text(recommend_music_names[4])
-        st.image(recommend_music_posters[4])
-        
+# Show recommendations
+if st.button("🎵 Show Recommendations"):
+    names, posters = recommend(selected_song)
+    if names:
+        st.subheader("🎼 You might also like:")
+        cols = st.columns(5)
+        for idx, col in enumerate(cols):
+            with col:
+                st.image(posters[idx], use_container_width=True)
+                st.caption(names[idx])
+    else:
+        st.warning("No recommendations found.")
+
