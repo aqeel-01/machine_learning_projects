@@ -72,9 +72,8 @@ Checked and handled missing values using SimpleImputer
 ### 7. Model Training
 Model used:
 
-from sklearn.ensemble import RandomForestClassifier
-rfc = RandomForestClassifier()
-rfc.fit(xTrain, yTrain)
+ RandomForestClassifier
+
 ### 8. Evaluation
 Confusion Matrix
 
