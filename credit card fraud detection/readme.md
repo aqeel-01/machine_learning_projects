@@ -44,7 +44,7 @@ Observed 0.17% fraud cases, confirming class imbalance
 
 fraud = data[data['Class'] == 1]
 valid = data[data['Class'] == 0]
-outlierFraction = len(fraud)/ float(len(valid))
+
 Fraud Cases: 492
 
 Valid Transactions: 284,315
@@ -58,9 +58,6 @@ Fraudulent transactions tend to have higher average amounts
 
 ### 5. Correlation Heatmap
 A heatmap was generated to examine feature correlation:
-
-corr_matrix = data.corr()
-sns.heatmap(corr_matrix, vmax=0.8, square=True)
 
 ### 6. Data Preparation
 Features (X) and labels (Y) separated
