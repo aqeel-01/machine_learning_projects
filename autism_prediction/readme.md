@@ -76,7 +76,8 @@ The app allows users to select a model and enter the required information to rec
 
 Below is a sample output for a negative ASD prediction:
 
-![ASD Negative Prediction](screenshots/autism_neg.png)
+![ASD Negative Prediction](screenshots/autism%20neg.PNG)
+
 
 
 ## File Structure
