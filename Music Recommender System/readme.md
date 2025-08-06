@@ -45,8 +45,7 @@ Built with **Pandas**, **NLTK**, **Scikit-learn**, and deployed using **Streamli
 
 ##  Project Structure
 
-details> <summary>📁 Click to expand project structure</summary>
-plaintext
+```
 
 machine_learning_projects/
 └── Music Recommender System/
@@ -58,7 +57,8 @@ machine_learning_projects/
     ├── screenshots/
     │   └── song pic upadted.PNG               # UI screenshot used in README
     └── README.md                              # Project documentation
-</details>     
+    
+```
 
 ## Run It Locally
 
