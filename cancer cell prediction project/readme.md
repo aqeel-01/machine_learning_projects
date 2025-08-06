@@ -7,15 +7,16 @@ A **Streamlit** web application that uses a **Naive Bayes classifier** to predic
 ---
 
 ##  Project Structure
-
+```
 cancer-cell-prediction-project/
 ├── cancer_app.py                     # Streamlit web app for cancer prediction
 ├── cancer_model.pkl                  # Trained Gaussian Naive Bayes model
-├── cancer_cell_classification.ipynb # Jupyter Notebook with data analysis, model training, evaluation
+├── cancer_cell_classification.ipynb # Jupyter Notebook for EDA, training, evaluation
 ├── README.md                         # Project documentation
+```
 
 
----
+
 
 ##  Dataset
 
