@@ -89,28 +89,28 @@ dermassist/
 
 ##  How It Works
 
-On image upload, the system:
+**•** On image upload, the system:
 
-Encodes the image in base64
+**•** Encodes the image in base64
 
-Sends it to the LLAMA-4 Scout model via the GROQ API
+**•** Sends it to the LLAMA-4 Scout model via the GROQ API
 
-Requests a concise diagnosis + treatment table (localized to Pakistan)
+**•** Requests a concise diagnosis + treatment table (localized to Pakistan)
 
-Continues chat in 50-word or fewer responses for clarity
+**•** Continues chat in 50-word or fewer responses for clarity
 
-Persists chat in memory per session ID via cookies
+**•** Persists chat in memory per session ID via cookies
 
 
 ##  Technologies Used
 
-FastAPI
+**•**  FastAPI
 
-GROQ + LLAMA-4
+**•**  GROQ + LLAMA-4
 
-Tailwind CSS
+**•**  Tailwind CSS
 
-Pillow
+**•**  Pillow
 
-JavaScript Fetch API
+**•**  JavaScript Fetch API
 
