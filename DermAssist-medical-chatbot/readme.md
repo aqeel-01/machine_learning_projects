@@ -36,9 +36,11 @@ DermAssist is an AI-driven medical chatbot built using **FastAPI** and **LLAMA-4
 
 ---
 
-##  Demo Video
 
-![Demo Preview](demo_/screenrecording-ezgif.gif)
+##  Live Demo
+You can try the app here: [Derm Assist on Render](https://derm-assist.onrender.com)
+
+> Note: The free Render plan may take 30–60 seconds to wake up if idle.
 
 ---
 
