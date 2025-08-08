@@ -6,7 +6,7 @@ DermAssist is an AI-driven medical chatbot built using **FastAPI** and **LLAMA-4
 
 ---
 
-##  Live Demo
+##  Work flow
 
 >  Upload an image →  Ask a question →  Get an AI-powered diagnosis and treatment.
 
