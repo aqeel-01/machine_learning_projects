@@ -2,7 +2,8 @@
 from flask import Flask, render_template, request
 import tensorflow as tf
 import pickle
-from tensorflow.keras.preprocessing.sequence import pad_sequences # type: ignore
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import os
 
 # Load model and tokenizer
 model = tf.keras.models.load_model("fake_news_model.h5")
@@ -32,4 +33,8 @@ def predict():
     return render_template('index.html', prediction_text=result, news_text=news_text)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Use PORT from environment variables for Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
+
