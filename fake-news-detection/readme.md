@@ -11,7 +11,7 @@ and an LSTM-based neural network architecture to achieve accurate text classific
 
 ## Screenshots
 
-![Fake News Detection Screenshot](screenshots/fake%20news.png)
+![Fake News Detection Screenshot](screenshots/fake%20news.PNG)
 
 
 
@@ -79,17 +79,10 @@ and an LSTM-based neural network architecture to achieve accurate text classific
 1. Clone the repository.
 2. Download the `news.csv` dataset and place it in the project directory.
 3. Run the Python script/notebook to preprocess data, build the model, and train.
-4. Ensure you have internet connection for downloading GloVe embeddings (automatically downloaded if not present).
 
 ---
 
-## Notes
 
-- Currently, only the `title` field is used for tokenization and model input for simplicity and speed.
-- Further improvements could involve combining title and full text, experimenting with hyperparameters, or using other pretrained embeddings.
-- The embedding layer is frozen to leverage the knowledge from GloVe without fine-tuning.
-
----
 
 
 
