@@ -43,7 +43,7 @@ but struggles with **short-term fluctuations**, which is expected for volatile s
 
 ##  How to Run
 
-**Clone this repo**  
+Clone this repo
   
 Install dependencies
 
